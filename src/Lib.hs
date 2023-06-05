@@ -81,3 +81,40 @@ aventurasDeEjemplo = [actaDeKeene, accidenteLaboratorio 1959, guerraDeVietnam, m
 
 ejemplo :: GrupoDeVigilantes
 ejemplo = desarrolloDeUnaHistoria grupoDeVigilantes aventurasDeEjemplo
+
+--Punto 2:
+nombreDelSalvador :: GrupoDeVigilantes -> String
+nombreDelSalvador = reporteDeSituacion alias mayorSegun cantidadDeHabilidades destruccionDeNiuShork
+
+mayorSegun ::(Ord b) => (a -> b) -> a -> a -> a
+mayorSegun  = referenciaSegun (>) 
+
+obtenerReferenciaSegunDeUnaSerieDeValores :: (Ord b) => ((a -> b) -> a -> a -> a)-> (a -> b) -> [a] -> a
+obtenerReferenciaSegunDeUnaSerieDeValores referencia transformador = foldl1 (referencia transformador)
+
+cantidadDeHabilidades :: Vigilante -> Int
+cantidadDeHabilidades = (length . habilidades)
+
+elElegido :: GrupoDeVigilantes -> String
+elElegido = reporteDeSituacion  primeraHabilidad mayorSegun longitudDeAlias guerraDeVietnam
+
+primeraHabilidad :: Vigilante -> String
+primeraHabilidad = (head . habilidades)
+
+longitudDeAlias :: Vigilante -> Int
+longitudDeAlias = (length . alias)
+
+reporteDeSituacion ::(Ord b) => (Vigilante -> a) -> ((Vigilante -> b) -> Vigilante -> Vigilante -> Vigilante)-> (Vigilante -> b) -> Evento -> GrupoDeVigilantes -> a
+reporteDeSituacion valorAObtener referencia transformador evento = valorAObtener . (obtenerReferenciaSegunDeUnaSerieDeValores referencia transformador) . evento
+
+patriarca :: GrupoDeVigilantes -> Int
+patriarca = reporteDeSituacion añoDeAparicion menorSegun añoDeAparicion actaDeKeene
+
+referenciaSegun :: (Ord b) => (b -> b -> Bool)-> (a -> b) -> a -> a -> a
+referenciaSegun unaFuncionParaComparar transformador unValor otroValor
+    | unaFuncionParaComparar  (transformador unValor) (transformador otroValor) = unValor
+    | otherwise                                                                 = otroValor
+
+menorSegun :: (Ord b) => (a -> b) -> a -> a -> a
+menorSegun = referenciaSegun (<)
+
